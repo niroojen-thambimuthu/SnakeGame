@@ -137,10 +137,34 @@ function changeDirection(event){
 };
 
 function checkGameOver(){
+    // check if snake hits canvas bounds
+    switch(true){
+        case (snake[0].x < 0):
+            gameOngoing = false;
+            break;
+        case (snake[0].x >= canvasWidth):
+            gameOngoing = false;
+            break;
+        case (snake[0].y < 0):
+            gameOngoing = false;
+            break;
+        case (snake[0].y >= canvasHeight):
+            gameOngoing = false;
+            break;
+    }
+    // check if snake touches itself
+    for(let i = 1; i < snake.length; i++){
+        if(snake[i].x == snake[0].x && snake[i].y == snake[0].y){
+            gameOngoing = false;
+        }
+    }
+};
+
+
+function displayGameOver(){
     
 };
 
 
-function displayGameOver(){};
 function resetGame(){};
 
