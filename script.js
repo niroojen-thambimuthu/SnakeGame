@@ -1,7 +1,7 @@
 const gameCanvas = document.querySelector("#gameCanvas");
 const scoreCounter = document.querySelector('#scoreCounter');
 const highScoreCounter = document.querySelector('#highScoreCounter');
-
+const snakeSpeedToggle = document.querySelectorAll('input[type=radio][name="snakeSpeed"');
 const ctx = gameCanvas.getContext('2d');
 const canvasWidth = gameCanvas.width;
 const canvasHeight = gameCanvas.height;
@@ -18,32 +18,14 @@ ctx.textAlign = "center";
 ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // in the middle
 
 window.addEventListener('keydown', keyClicked);
-
-
-
-
-const snakeSpeedToggle = document.querySelectorAll('input[type=radio][name="snakeSpeed"');
-
-
 snakeSpeedToggle.forEach(radio => radio.addEventListener('change', () => snakeSpeed = parseInt(radio.value, 10)));
 
-
-
-// add snake speed, snake size, highscore(cookie???), bug where food is randomized within snake
-// https://www.javascripttutorial.net/javascript-dom/javascript-radio-button/#:~:text=Introduction%20to%20the%20JavaScript%20Radio,is%20called%20a%20radio%20group.
-
-
-
-
-
-
-
+// highscore(cookie???)
 
 
 function gameStarted(){
     // Reset Game Stats
     gameOngoing = true;
-    // pauseCheck = true;
     score = 0;
     snakeX = unitSize;
     snakeY = 0;
@@ -57,7 +39,8 @@ function gameStarted(){
 };
 
 function nextCanvasMove(){
-    if(gameOngoing == true && pauseCheck == false ){ // Game ongoing
+    // Game ongoing
+    if(gameOngoing == true && pauseCheck == false ){
         setTimeout(() =>{
             updateCanvas();
             moveSnake();
@@ -66,10 +49,12 @@ function nextCanvasMove(){
             nextCanvasMove();
         }, snakeSpeed)
     }
+    // Game has Paused
     else if(gameOngoing == false && pauseCheck == true){
-        ctx.fillText("Pause", canvasWidth / 2, canvasHeight / 2); // Game has Paused
+        ctx.fillText("Pause", canvasWidth / 2, canvasHeight / 2);
     }
-    else{ // Game has ended
+    // Game has ended
+    else{
         // displayGameOver();
         //GAME OVER 
         // ctx.font = "50px MV Boli";
@@ -89,6 +74,13 @@ function createFood(){
     }
     foodXCoor = randomFood(0, canvasWidth - unitSize);
     foodYCoor = randomFood(0, canvasWidth - unitSize);
+
+    // Bug: If food is assigned within snake, create food again
+    for(let i = 0; i < snake.length; i++){
+        if(snake[i].x == foodXCoor && snake[i].y == foodYCoor){
+            createFood();
+        }
+    }
 };
 
 function updateCanvas(){
@@ -122,6 +114,8 @@ function snakeCanvas(){
     // Display Snake based on coordinates, 25px square
     ctx.fillStyle = snakeColor;
     // ctx.strokeStyle = snakeBorder;
+    // ctx.strokeRect(snake[0].x, snake[0].y, unitSize, unitSize);
+
     snake.forEach(snakePart => {
         ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
         // ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
