@@ -2,17 +2,14 @@ const gameCanvas = document.querySelector("#gameCanvas");
 const scoreCounter = document.querySelector('#scoreCounter');
 const highScoreCounter = document.querySelector('#highScoreCounter');
 
-
-
-
 const ctx = gameCanvas.getContext('2d');
 const canvasWidth = gameCanvas.width;
 const canvasHeight = gameCanvas.height;
 
 // Game canvas square 500px/side, each unit is 25px square
 let canvasColor = 'silver', snakeColor = 'white', snakeBorder = 'red', foodColor = 'red';
-let foodXCoor, foodYCoor, score, snake;
-let unitSize = 25, snakeX = unitSize, snakeY = 0, gameOngoing = false, snakeSpeed = 75, pauseCheck = false;
+let foodXCoor, foodYCoor, score, snake, snakeSpeed = 75;
+let unitSize = 30, snakeX = unitSize, snakeY = 0, gameOngoing = false, pauseCheck = false;
 
 ///////////////////////////
 ctx.font = "20px MV Boli";
@@ -22,11 +19,26 @@ ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // 
 
 window.addEventListener('keydown', keyClicked);
 
-console.log("TEST HIGHSCORE" + highScoreCounter.textContent)
+
+
+
+const snakeSpeedToggle = document.querySelectorAll('input[type=radio][name="snakeSpeed"');
+
+
+snakeSpeedToggle.forEach(radio => radio.addEventListener('change', () => snakeSpeed = parseInt(radio.value, 10)));
+
 
 
 // add snake speed, snake size, highscore(cookie???), bug where food is randomized within snake
 // https://www.javascripttutorial.net/javascript-dom/javascript-radio-button/#:~:text=Introduction%20to%20the%20JavaScript%20Radio,is%20called%20a%20radio%20group.
+
+
+
+
+
+
+
+
 
 function gameStarted(){
     // Reset Game Stats
@@ -112,7 +124,7 @@ function snakeCanvas(){
     // ctx.strokeStyle = snakeBorder;
     snake.forEach(snakePart => {
         ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
-        ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
+        // ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
     })
 };
 
