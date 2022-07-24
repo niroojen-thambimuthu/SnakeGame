@@ -9,6 +9,8 @@ let canvasColor = 'silver', snakeColor = 'white', snakeBorder = 'red', foodColor
 let foodXCoor, foodYCoor, score, snake;
 let unitSize = 25, snakeX = unitSize, snakeY = 0, gameOngoing = false, snakeSpeed = 75; // 
 
+let pauseCheck = false;
+
 ///////////////////////////
 ctx.font = "20px MV Boli";
 ctx.fillStyle = "black";
@@ -24,6 +26,7 @@ window.addEventListener('keydown', keyClicked);
 function gameStarted(){
     // Reset Game Stats
     gameOngoing = true;
+    // pauseCheck = true;
     score = 0;
     snakeX = unitSize;
     snakeY = 0;
@@ -37,7 +40,7 @@ function gameStarted(){
 };
 
 function nextCanvasMove(){
-    if(gameOngoing){
+    if(gameOngoing == true && pauseCheck == false ){ // Game ongoing
         setTimeout(() =>{
             updateCanvas();
             moveSnake();
@@ -46,14 +49,17 @@ function nextCanvasMove(){
             nextCanvasMove();
         }, snakeSpeed)
     }
-    else{
+    else if(gameOngoing == false && pauseCheck == true){
+        ctx.fillText("Pause", canvasWidth / 2, canvasHeight / 2); // Game has Paused
+    }
+    else{ // Game has ended
         // displayGameOver();
         //GAME OVER 
         // ctx.font = "50px MV Boli";
         // ctx.fillStyle = "black";
         // ctx.textAlign = "center";
         // ctx.fillStyle = 'white';
-        ctx.fillText("GAME OVER! HIT ENTER TO Play again!", canvasWidth / 2, canvasHeight / 2); // in the middle
+        ctx.fillText("GAME OVER! HIT ENTER TO PlAY AGAIN!", canvasWidth / 2, canvasHeight / 2); // in the middle
         gameOngoing = false;
     }
 };
@@ -105,8 +111,18 @@ function keyClicked(event){
     // X/Y Coordinates
     const keyPressed = event.keyCode;
     switch(true){
-        case(keyPressed == 13 && gameOngoing == false): // key Enter to start game
+        case(keyPressed == 13 && gameOngoing == false && pauseCheck == false): // key Enter to Start game
             gameStarted();
+            break;
+        case(keyPressed == 13 && gameOngoing == true && pauseCheck == false): // key Enter to pause game
+            pauseCheck = true;
+            gameOngoing = false;
+            break;
+        case(keyPressed == 13 && gameOngoing == false && pauseCheck == true): // key Enter to Resume game
+            pauseCheck = false;
+            gameOngoing = true;
+            updateCanvas();
+            nextCanvasMove();
             break;
         case(keyPressed == 37 && !(snakeX == unitSize)): // key left
             snakeX = -unitSize;
