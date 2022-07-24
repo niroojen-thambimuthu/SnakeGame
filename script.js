@@ -1,69 +1,65 @@
 const gameCanvas = document.querySelector("#gameCanvas");
-const ctx = gameCanvas.getContext('2d');
 const scoreCounter = document.querySelector('#scoreCounter');
-const resetButtom = document.querySelector('#resetButton');
+const ctx = gameCanvas.getContext('2d');
 const canvasWidth = gameCanvas.width;
 const canvasHeight = gameCanvas.height;
 
-let canvasColor = 'silver';
-let snakeColor = 'white';
-let snakeBorder = 'red';
+// Game canvas square 500px/side, each unit is 25px square
+let canvasColor = 'silver', snakeColor = 'white', snakeBorder = 'red', foodColor = 'red';
+let foodXCoor, foodYCoor, score, snake;
+let unitSize = 25, snakeX = unitSize, snakeY = 0, gameOngoing = false, snakeSpeed = 75; // 
 
-let foodColor = 'red';
-let foodXCoor;
-let foodYCoor;
+///////////////////////////
+ctx.font = "20px MV Boli";
+ctx.fillStyle = "black";
+ctx.textAlign = "center";
+ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // in the middle
 
-let unitSize = 25;
-let gameOngoing = false;
-let snakeX = unitSize;
-let snakeY = 0;
+window.addEventListener('keydown', keyClicked);
 
-let score = 0
-let snake = [
-    // {x:unitSize*4, y:0},
-    // {x:unitSize*3, y:0},
-    // {x:unitSize*2, y:0},
-    // {x:unitSize, y:0},
-    {x:0, y:0}
-];
 
-window.addEventListener('keydown', changeDirection);
-resetButtom.addEventListener('click', resetGame);
-
-gameStarted();
-// createFood();
-// drawFood();
+// add snake speed, snake size, highscore, bug where food is randomized within snake
+// https://www.javascripttutorial.net/javascript-dom/javascript-radio-button/#:~:text=Introduction%20to%20the%20JavaScript%20Radio,is%20called%20a%20radio%20group.
 
 function gameStarted(){
+    // Reset Game Stats
     gameOngoing = true;
+    score = 0;
+    snakeX = unitSize;
+    snakeY = 0;
+    snake = [{x:0, y:0}];
     scoreCounter.textContent = score;
+
+    // Make Snake Food and Start
     createFood();
-    drawFood();
-    nextTick();
+    updateCanvas();
+    nextCanvasMove();
 };
 
-function nextTick(){
+function nextCanvasMove(){
     if(gameOngoing){
         setTimeout(() =>{
-            clearBoard();
-            drawFood();
+            updateCanvas();
             moveSnake();
-            drawSnake();
-            checkGameOver();
-            nextTick();
-        }, 75)
+            snakeCanvas();
+            snakeRules();
+            nextCanvasMove();
+        }, snakeSpeed)
     }
     else{
-        displayGameOver();
+        // displayGameOver();
+        //GAME OVER 
+        // ctx.font = "50px MV Boli";
+        // ctx.fillStyle = "black";
+        // ctx.textAlign = "center";
+        // ctx.fillStyle = 'white';
+        ctx.fillText("GAME OVER! HIT ENTER TO Play again!", canvasWidth / 2, canvasHeight / 2); // in the middle
+        gameOngoing = false;
     }
-};
-
-function clearBoard(){
-    ctx.fillStyle = canvasColor;
-    ctx.fillRect(0,0, canvasWidth, canvasHeight);
 };
 
 function createFood(){
+    // Randomly assign food location using x/y coordinates
     function randomFood(min, max){
         const randNum = Math.round((Math.random() * (max-min) + min) / unitSize) * unitSize
         return randNum;
@@ -72,14 +68,16 @@ function createFood(){
     foodYCoor = randomFood(0, canvasWidth - unitSize);
 };
 
-function drawFood(){
+function updateCanvas(){
+    // Update canvas and Food location
+    ctx.fillStyle = canvasColor;
+    ctx.fillRect(0,0, canvasWidth, canvasHeight);
     ctx.fillStyle = foodColor;
     ctx.fillRect(foodXCoor, foodYCoor, unitSize, unitSize)
 };
 
 function moveSnake(){
-    const head = {x: snake[0].x + snakeX,
-                y: snake[0].y + snakeY};
+    const head = {x: snake[0].x + snakeX, y: snake[0].y + snakeY};
     snake.unshift(head);
     // if food is eaten
     if (snake[0].x == foodXCoor && snake[0].y == foodYCoor){
@@ -92,51 +90,44 @@ function moveSnake(){
     }
 };
 
-function drawSnake(){
+function snakeCanvas(){
+    // Display Snake based on coordinates, 25px square
     ctx.fillStyle = snakeColor;
-    ctx.strokeStyle = snakeBorder;
+    // ctx.strokeStyle = snakeBorder;
     snake.forEach(snakePart => {
         ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
         ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
     })
 };
 
-function changeDirection(event){
+function keyClicked(event){
+    // FYI: snake cannot go opposite direction during game
+    // X/Y Coordinates
     const keyPressed = event.keyCode;
-    const LEFT = 37;
-    const up = 38;
-    const right = 39;
-    const down = 40;
-
-    const goingUp = (snakeY == -unitSize);
-    const goingDown = (snakeY == unitSize);
-    const goingRight = (snakeX == unitSize);
-    const goingLeft = (snakeX == -unitSize);
-
     switch(true){
-        case(keyPressed == LEFT && !goingRight):
+        case(keyPressed == 13 && gameOngoing == false): // key Enter to start game
+            gameStarted();
+            break;
+        case(keyPressed == 37 && !(snakeX == unitSize)): // key left
             snakeX = -unitSize;
             snakeY = 0;
             break;
-        case(keyPressed == up && !goingDown):
+        case(keyPressed == 38 && !(snakeY == unitSize)): // key up
             snakeX = 0;
             snakeY = -unitSize;
             break;
-        case(keyPressed == right && !goingLeft):
+        case(keyPressed == 39 && !(snakeX == -unitSize)): // key right
             snakeX = unitSize;
             snakeY = 0;
             break;
-        case(keyPressed == down && !goingUp):
+        case(keyPressed == 40 && !(snakeY == -unitSize)): // key down
             snakeX = 0;
             snakeY = unitSize;
             break;
-        
     }
-    // console.log(keyPressed);
-
 };
 
-function checkGameOver(){
+function snakeRules(){
     // check if snake hits canvas bounds
     switch(true){
         case (snake[0].x < 0):
@@ -159,28 +150,3 @@ function checkGameOver(){
         }
     }
 };
-
-
-function displayGameOver(){
-    ctx.font = "50px MV Boli";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    ctx.fillText("GAME OVER!", canvasWidth / 2, canvasHeight / 2); // in the middle
-    gameOngoing = false;
-};
-
-
-function resetGame(){
-    score = 0;
-    snakeX = unitSize;
-    snakeY = 0;
-    snake = [
-        // {x:unitSize * 4, y:0},
-        // {x:unitSize * 3, y:0},
-        // {x:unitSize * 2, y:0},
-        // {x:unitSize, y:0},
-        {x:0, y:0}
-    ];
-    gameStarted();
-};
-

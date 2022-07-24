@@ -1,10 +1,8 @@
 #gameBox {
-    /* text-align: center; */
+    text-align: center;
 }
 
 #gameCanvas {
-    /* width: 500px;
-    height: 500px; */
     border: 3px solid black;
 }
 
@@ -12,12 +10,3 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 50px;
 }
-
-#resetButton {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 30px;
-    border: 3px solid black;
-}
-
-
-
