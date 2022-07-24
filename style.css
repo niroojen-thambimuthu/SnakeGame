@@ -1,9 +1,31 @@
+*{
+    /* padding: 0px; */
+    margin: 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+}
+
+body {
+    height: 100vh;
+    /* padding: 0; */
+}
+
 #gameBox {
     text-align: center;
+    background-color: #283547;
+    height: 100vh;
+}
+
+#titleName {
+    height: 10vh;
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
 }
 
 #gameCanvas {
-    border: 3px solid black;
+    border: 5px solid orange;
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto;
 }
 
 #scoreCounter, #highScoreCounter{

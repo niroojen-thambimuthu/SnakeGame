@@ -6,14 +6,14 @@ const ctx = gameCanvas.getContext('2d');
 const canvasWidth = gameCanvas.width;
 const canvasHeight = gameCanvas.height;
 
-// Game canvas square 500px/side, each unit is 25px square
+// Game canvas square 600px/side, each unit is 30px square
 let canvasColor = 'silver', snakeColor = 'white', snakeBorder = 'red', foodColor = 'red';
 let foodXCoor, foodYCoor, score, snake, snakeSpeed = 75;
 let unitSize = 30, snakeX = unitSize, snakeY = 0, gameOngoing = false, pauseCheck = false;
 
 ///////////////////////////
-ctx.font = "20px MV Boli";
-ctx.fillStyle = "black";
+ctx.font = "20px Franklin Gothic Medium";
+ctx.fillStyle = "white";
 ctx.textAlign = "center";
 ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // in the middle
 
@@ -92,18 +92,17 @@ function updateCanvas(){
 };
 
 function moveSnake(){
+    // Check if food is eaten by snake head
     const head = {x: snake[0].x + snakeX, y: snake[0].y + snakeY};
     snake.unshift(head);
-    // if food is eaten
     if (snake[0].x == foodXCoor && snake[0].y == foodYCoor){
         score+=1;
         scoreCounter.textContent = score;
         createFood();
-
+        // Record Highscore
         if( score > highScoreCounter.textContent){
             highScoreCounter.textContent = score;
         }
-
     }
     else{
         snake.pop();
