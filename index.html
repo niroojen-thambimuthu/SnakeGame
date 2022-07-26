@@ -10,15 +10,25 @@
     <title>SNAKEGAME</title>
 <body>
     <div id="gameBox">
-        <h1 id="titleName">SNAKEGAME</h1>
-        <canvas id="gameCanvas" width="600" height="600"></canvas>
-        SCORE<div id="scoreCounter">0</div>
-        HighSCore<div id="highScoreCounter">0</div>
+        <div class="headerBox"><h1>SNAKEGAME</h1></div>
+        <div class="element">
+            <p class="elementI">SCORE</p>
+            <div class="elementI">
+                <div id="scoreCounter">0</div>
+            </div>
+        </div>
+        <div class="element">
+            <p class="elementI">HIGHSCORE</p>
+            <div class="elementI">
+                <div id="highScoreCounter">0</div>
+            </div>
+        </div> 
+        <canvas id="gameCanvas" width="600" height="600"></canvas>       
         <div>
             <input type="radio" name="snakeSpeed" value="100">
             <input type="radio" name="snakeSpeed" value="75" checked>
             <input type="radio" name="snakeSpeed" value="40">
-        </div>
+        </div>       
     </div>
     <script src="script.js"></script>
 </body>
