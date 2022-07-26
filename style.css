@@ -22,7 +22,7 @@ body {
 }
 
 #gameCanvas {
-    border: 5px solid orange;
+    border: 5px solid silver;
     border-radius: 5px;
     display: block;
     margin: 0 auto;

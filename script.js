@@ -7,20 +7,20 @@ const canvasWidth = gameCanvas.width;
 const canvasHeight = gameCanvas.height;
 
 // Game canvas square 600px/side, each unit is 30px square
-let canvasColor = 'silver', snakeColor = 'white', snakeBorder = 'red', foodColor = 'red';
 let foodXCoor, foodYCoor, score, snake, snakeSpeed = 75;
 let unitSize = 30, snakeX = unitSize, snakeY = 0, gameOngoing = false, pauseCheck = false;
 
-///////////////////////////
-ctx.font = "20px Franklin Gothic Medium";
+// Main Screen
+ctx.fillStyle = "#202C37";
+ctx.fillRect(0,0, canvasWidth, canvasHeight);
 ctx.fillStyle = "white";
+ctx.font = "20px Franklin Gothic Medium";
 ctx.textAlign = "center";
 ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // in the middle
 
+// Event listener for keys clicked and radio-buttons
 window.addEventListener('keydown', keyClicked);
 snakeSpeedToggle.forEach(radio => radio.addEventListener('change', () => snakeSpeed = parseInt(radio.value, 10)));
-
-// highscore(cookie???)
 
 
 function gameStarted(){
@@ -51,23 +51,22 @@ function nextCanvasMove(){
     }
     // Game has Paused
     else if(gameOngoing == false && pauseCheck == true){
-        ctx.fillText("Pause", canvasWidth / 2, canvasHeight / 2);
+        ctx.fillText("PAUSE", canvasWidth / 2, canvasHeight / 2);
     }
     // Game has ended
     else{
-        // displayGameOver();
-        //GAME OVER 
-        // ctx.font = "50px MV Boli";
-        // ctx.fillStyle = "black";
-        // ctx.textAlign = "center";
-        // ctx.fillStyle = 'white';
-        ctx.fillText("GAME OVER! HIT ENTER TO PlAY AGAIN!", canvasWidth / 2, canvasHeight / 2); // in the middle
+        ctx.fillStyle = "#202C37";
+        ctx.fillRect(0,0, canvasWidth, canvasHeight);
+        ctx.fillStyle = "white";
+        ctx.font = "20px Franklin Gothic Medium";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER! HIT ENTER TO PLAY AGAIN!", canvasWidth / 2, canvasHeight / 2); // in the middle
         gameOngoing = false;
     }
 };
 
 function createFood(){
-    // Randomly assign food location using x/y coordinates
+    // Randomly assign food location to x/y coordinates
     function randomFood(min, max){
         const randNum = Math.round((Math.random() * (max-min) + min) / unitSize) * unitSize
         return randNum;
@@ -85,9 +84,15 @@ function createFood(){
 
 function updateCanvas(){
     // Update canvas and Food location
-    ctx.fillStyle = canvasColor;
-    ctx.fillRect(0,0, canvasWidth, canvasHeight);
-    ctx.fillStyle = foodColor;
+    // two-tone grid color
+    for(let i=0; i<21; i++) {
+        for(let j=0; j<21; j++) {
+          ctx.fillStyle = ((i+j)%2==0) ? "#283547":"#202C37";
+          ctx.fillRect(j*unitSize, i*unitSize, unitSize, unitSize);
+        }
+    }
+    // food at location
+    ctx.fillStyle = 'red';
     ctx.fillRect(foodXCoor, foodYCoor, unitSize, unitSize)
 };
 
@@ -110,14 +115,14 @@ function moveSnake(){
 };
 
 function snakeCanvas(){
-    // Display Snake based on coordinates, 25px square
-    ctx.fillStyle = snakeColor;
-    // ctx.strokeStyle = snakeBorder;
-    // ctx.strokeRect(snake[0].x, snake[0].y, unitSize, unitSize);
+    // Display Snake based on coordinates, 30px square
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'orange';
+    ctx.strokeRect(snake[0].x, snake[0].y, unitSize, unitSize);
 
     snake.forEach(snakePart => {
         ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
-        // ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
+        ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
     })
 };
 
