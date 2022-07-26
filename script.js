@@ -22,7 +22,6 @@ ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // 
 window.addEventListener('keydown', keyClicked);
 snakeSpeedToggle.forEach(radio => radio.addEventListener('change', () => snakeSpeed = parseInt(radio.value, 10)));
 
-
 function gameStarted(){
     // Reset Game Stats
     gameOngoing = true;
@@ -36,33 +35,6 @@ function gameStarted(){
     createFood();
     updateCanvas();
     nextCanvasMove();
-};
-
-function nextCanvasMove(){
-    // Game ongoing
-    if(gameOngoing == true && pauseCheck == false ){
-        setTimeout(() =>{
-            updateCanvas();
-            moveSnake();
-            snakeCanvas();
-            snakeRules();
-            nextCanvasMove();
-        }, snakeSpeed)
-    }
-    // Game has Paused
-    else if(gameOngoing == false && pauseCheck == true){
-        ctx.fillText("PAUSE", canvasWidth / 2, canvasHeight / 2);
-    }
-    // Game has ended
-    else{
-        ctx.fillStyle = "#202C37";
-        ctx.fillRect(0,0, canvasWidth, canvasHeight);
-        ctx.fillStyle = "white";
-        ctx.font = "20px Franklin Gothic Medium";
-        ctx.textAlign = "center";
-        ctx.fillText("GAME OVER! HIT ENTER TO PLAY AGAIN!", canvasWidth / 2, canvasHeight / 2); // in the middle
-        gameOngoing = false;
-    }
 };
 
 function createFood(){
@@ -91,9 +63,40 @@ function updateCanvas(){
           ctx.fillRect(j*unitSize, i*unitSize, unitSize, unitSize);
         }
     }
-    // food at location
-    ctx.fillStyle = 'red';
-    ctx.fillRect(foodXCoor, foodYCoor, unitSize, unitSize)
+    // food at location    
+    ctx.beginPath();
+    ctx.arc((foodXCoor+(unitSize/2)), (foodYCoor+(unitSize/2)), 13, 0, 2 * Math.PI);
+    ctx.fillStyle = "#db272a";
+    ctx.fill();
+};
+
+function nextCanvasMove(){
+    // Game ongoing
+    if(gameOngoing == true && pauseCheck == false ){
+        setTimeout(() =>{
+            updateCanvas();
+            moveSnake();
+            snakeCanvas();
+            snakeRules();
+            nextCanvasMove();
+        }, snakeSpeed)
+    }
+    // Game has Paused
+    else if(gameOngoing == false && pauseCheck == true){
+        ctx.fillStyle = "white";
+        ctx.fillText("PAUSE", canvasWidth / 2, canvasHeight / 2);
+    }
+    // Game has ended
+    else{
+        ctx.fillStyle = "#202C37";
+        ctx.fillRect(0,0, canvasWidth, canvasHeight);
+        ctx.fillStyle = "white";
+        ctx.font = "20px Franklin Gothic Medium";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER!", canvasWidth / 2, (canvasHeight / 2)-15); // in the middle
+        ctx.fillText("HIT ENTER TO PLAY AGAIN!", canvasWidth / 2, (canvasHeight / 2) +15); // in the middle
+        gameOngoing = false;
+    }
 };
 
 function moveSnake(){
@@ -116,14 +119,35 @@ function moveSnake(){
 
 function snakeCanvas(){
     // Display Snake based on coordinates, 30px square
-    ctx.fillStyle = 'white';
-    ctx.strokeStyle = 'orange';
+    ctx.fillStyle = '#007ccc';
     ctx.strokeRect(snake[0].x, snake[0].y, unitSize, unitSize);
-
     snake.forEach(snakePart => {
         ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
-        ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
     })
+};
+
+function snakeRules(){
+    // check if snake hits canvas bounds
+    switch(true){
+        case (snake[0].x < 0):
+            gameOngoing = false;
+            break;
+        case (snake[0].x >= canvasWidth):
+            gameOngoing = false;
+            break;
+        case (snake[0].y < 0):
+            gameOngoing = false;
+            break;
+        case (snake[0].y >= canvasHeight):
+            gameOngoing = false;
+            break;
+    }
+    // check if snake touches itself
+    for(let i = 1; i < snake.length; i++){
+        if(snake[i].x == snake[0].x && snake[i].y == snake[0].y){
+            gameOngoing = false;
+        }
+    }
 };
 
 function keyClicked(event){
@@ -160,29 +184,5 @@ function keyClicked(event){
             snakeX = 0;
             snakeY = unitSize;
             break;
-    }
-};
-
-function snakeRules(){
-    // check if snake hits canvas bounds
-    switch(true){
-        case (snake[0].x < 0):
-            gameOngoing = false;
-            break;
-        case (snake[0].x >= canvasWidth):
-            gameOngoing = false;
-            break;
-        case (snake[0].y < 0):
-            gameOngoing = false;
-            break;
-        case (snake[0].y >= canvasHeight):
-            gameOngoing = false;
-            break;
-    }
-    // check if snake touches itself
-    for(let i = 1; i < snake.length; i++){
-        if(snake[i].x == snake[0].x && snake[i].y == snake[0].y){
-            gameOngoing = false;
-        }
     }
 };
