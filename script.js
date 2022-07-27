@@ -16,7 +16,9 @@ ctx.fillRect(0,0, canvasWidth, canvasHeight);
 ctx.fillStyle = "white";
 ctx.font = "20px Franklin Gothic Medium";
 ctx.textAlign = "center";
-ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // in the middle
+// ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // in the middle
+ctx.fillText("HIT ENTER TO START SNAKEGAME!", canvasWidth / 2, (canvasHeight / 2)-15); 
+ctx.fillText("HIT ENTER IN GAME TO PAUSE", canvasWidth / 2, (canvasHeight / 2) +15);
 
 // Event listener for keys clicked and radio-buttons
 window.addEventListener('keydown', keyClicked);
@@ -66,7 +68,7 @@ function updateCanvas(){
     // food at location    
     ctx.beginPath();
     ctx.arc((foodXCoor+(unitSize/2)), (foodYCoor+(unitSize/2)), 13, 0, 2 * Math.PI);
-    ctx.fillStyle = "#db272a";
+    ctx.fillStyle = "#ff8c00";
     ctx.fill();
 };
 
@@ -93,8 +95,8 @@ function nextCanvasMove(){
         ctx.fillStyle = "white";
         ctx.font = "20px Franklin Gothic Medium";
         ctx.textAlign = "center";
-        ctx.fillText("GAME OVER!", canvasWidth / 2, (canvasHeight / 2)-15); // in the middle
-        ctx.fillText("HIT ENTER TO PLAY AGAIN!", canvasWidth / 2, (canvasHeight / 2) +15); // in the middle
+        ctx.fillText("GAME OVER!", canvasWidth / 2, (canvasHeight / 2)-15); 
+        ctx.fillText("HIT ENTER TO PLAY AGAIN!", canvasWidth / 2, (canvasHeight / 2) +15);
         gameOngoing = false;
     }
 };
@@ -119,7 +121,7 @@ function moveSnake(){
 
 function snakeCanvas(){
     // Display Snake based on coordinates, 30px square
-    ctx.fillStyle = '#007ccc';
+    ctx.fillStyle = 'silver';
     ctx.strokeRect(snake[0].x, snake[0].y, unitSize, unitSize);
     snake.forEach(snakePart => {
         ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
