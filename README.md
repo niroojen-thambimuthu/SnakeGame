@@ -1,2 +1,2 @@
 # SnakeGame
- SnakeGame in JS
+ SnakeGame in JS, HTML and CSS.
