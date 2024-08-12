@@ -17,8 +17,8 @@ ctx.fillStyle = "white";
 ctx.font = "20px Franklin Gothic Medium";
 ctx.textAlign = "center";
 // ctx.fillText("HIT ENTER TO START GAME!", canvasWidth / 2, canvasHeight / 2); // in the middle
-ctx.fillText("HIT ENTER TO START SNAKEGAME!", canvasWidth / 2, (canvasHeight / 2)-15); 
-ctx.fillText("HIT ENTER IN GAME TO PAUSE", canvasWidth / 2, (canvasHeight / 2) +15);
+ctx.fillText("HIT ENTER TO START/PAUSE SNAKEGAME!", canvasWidth / 2, (canvasHeight / 2)-15); 
+// ctx.fillText("HIT ENTER IN GAME TO PAUSE", canvasWidth / 2, (canvasHeight / 2) +15);
 
 // Event listener for keys clicked and radio-buttons
 window.addEventListener('keydown', keyClicked);
